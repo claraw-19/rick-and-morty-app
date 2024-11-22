@@ -2,13 +2,11 @@ import { createCharacterCard } from "./components/CharacterCard/CharacterCard.js
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 
-async function fetchCharacters(pageNumber) {
+async function fetchCharacters(pageNumber, searchQuery) {
   cardContainer.innerHTML = "";
-  const apiUrl = `https://rickandmortyapi.com/api/character?page=${pageNumber}`;
+  const apiUrl = `https://rickandmortyapi.com/api/character?page=${pageNumber}&name=${searchQuery}`;
   const response = await fetch(apiUrl);
   const data = await response.json();
-
-  console.log(data);
 
   const characters = data.results;
   characters.forEach((character) => {
@@ -28,16 +26,6 @@ async function fetchCharacters(pageNumber) {
   });
 }
 
-fetchCharacters();
-
-//1. create const for api url
-//2. create function fetch characters
-//3. console log for test and check output with function create...
-//4. create parameteres for function create
-//5. array with 20 objects data.results[0].name
-
-//const characterCard = createCharacterCard("url", "Klaus", "Alive", "Coach", 22);
-
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
 );
@@ -50,12 +38,14 @@ const pagination = document.querySelector('[data-js="pagination"]');
 // States
 const maxPage = 42;
 let pageNumber = 1;
-const searchQuery = "";
+let searchQuery = "";
+
+fetchCharacters(pageNumber, searchQuery);
 
 nextButton.addEventListener("click", () => {
   if (pageNumber < maxPage) {
     pageNumber++;
-    fetchCharacters(pageNumber);
+    fetchCharacters(pageNumber, searchQuery);
     pagination.textContent = `${pageNumber} / ${maxPage}`;
   }
 });
@@ -63,12 +53,15 @@ nextButton.addEventListener("click", () => {
 prevButton.addEventListener("click", () => {
   if (pageNumber > 1) {
     pageNumber--;
-    fetchCharacters(pageNumber);
+    fetchCharacters(pageNumber, searchQuery);
     pagination.textContent = `${pageNumber} / ${maxPage}`;
   }
 });
 
-// 1. create an EventListener to the next Button
-// 2. increase the pageNumber by one and fix max
-// 3. call the fetchCharacters(pageNumber)
-// 4. currentpage Number update pagination.textContent ()
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formElements = event.target.elements;
+  searchQuery = formElements.query.value;
+  pageNumber = 1;
+  fetchCharacters(pageNumber, searchQuery);
+});
