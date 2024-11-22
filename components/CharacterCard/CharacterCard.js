@@ -28,10 +28,3 @@ export function createCharacterCard(
                 </div>`;
   return li;
 }
-
-console.log(createCharacterCard("url", "Klaus", "Alive", "Coach", 22));
-
-//1. create li element
-//2.1 fill li with inner.html
-//2.2 set text context to different variables
-// 2.3 return li
