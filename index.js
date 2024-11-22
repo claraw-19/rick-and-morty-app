@@ -2,13 +2,13 @@ import { createCharacterCard } from "./components/CharacterCard/CharacterCard.js
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 
-async function fetchCharacters() {
+async function fetchCharacters(pageNumber) {
   cardContainer.innerHTML = "";
-  const apiUrl = "https://rickandmortyapi.com/api/character";
+  const apiUrl = `https://rickandmortyapi.com/api/character?page=${pageNumber}`;
   const response = await fetch(apiUrl);
   const data = await response.json();
 
-  console.log(data.results);
+  console.log(data);
 
   const characters = data.results;
   characters.forEach((character) => {
@@ -48,6 +48,27 @@ const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 
 // States
-const maxPage = 1;
-const page = 1;
+const maxPage = 42;
+let pageNumber = 1;
 const searchQuery = "";
+
+nextButton.addEventListener("click", () => {
+  if (pageNumber < maxPage) {
+    pageNumber++;
+    fetchCharacters(pageNumber);
+    pagination.textContent = `${pageNumber} / ${maxPage}`;
+  }
+});
+
+prevButton.addEventListener("click", () => {
+  if (pageNumber > 1) {
+    pageNumber--;
+    fetchCharacters(pageNumber);
+    pagination.textContent = `${pageNumber} / ${maxPage}`;
+  }
+});
+
+// 1. create an EventListener to the next Button
+// 2. increase the pageNumber by one and fix max
+// 3. call the fetchCharacters(pageNumber)
+// 4. currentpage Number update pagination.textContent ()
