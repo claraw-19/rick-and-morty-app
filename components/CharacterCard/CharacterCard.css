@@ -4,6 +4,7 @@
 .card {
   width: 300px;
   background-color: var(--color-secondary);
+  border-radius: 8px;
 }
 
 .card__info {
